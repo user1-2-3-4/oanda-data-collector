@@ -1,0 +1,58 @@
+# Each entry maps a FRIENDLY SYMBOL (used as the CSV filename stem) to the
+# OANDA INSTRUMENT CODE (used in API calls). This mirrors the SYMBOL_TO_OANDA
+# dict from the original script but is now config-driven and grouped by asset
+# class.
+#
+# Availability varies by account region. Run smoke_test first and remove
+# anything that 404s or 403s before enabling the production workflow.
+
+forex:
+  EURUSD: EUR_USD
+  GBPUSD: GBP_USD
+  USDJPY: USD_JPY
+  USDCHF: USD_CHF
+  AUDUSD: AUD_USD
+  NZDUSD: NZD_USD
+  USDCAD: USD_CAD
+  EURGBP: EUR_GBP
+  EURJPY: EUR_JPY
+  GBPJPY: GBP_JPY
+  AUDJPY: AUD_JPY
+  CADJPY: CAD_JPY
+  NZDJPY: NZD_JPY
+
+metals:
+  XAUUSD: XAU_USD   # Gold
+  XAGUSD: XAG_USD   # Silver
+  XPTUSD: XPT_USD   # Platinum
+  XPDUSD: XPD_USD   # Palladium
+
+indices:
+  SPX500: SPX500_USD
+  NAS100: NAS100_USD
+  US30:   US30_USD
+  UK100:  UK100_GBP
+  DE30:   DE30_EUR
+  EU50:   EU50_EUR
+  FR40:   FR40_EUR
+  JP225:  JP225_USD
+  AUS200: AU200_AUD
+  HK33:   HK33_HKD
+
+commodities:
+  WTICO:  WTICO_USD   # WTI Crude
+  BCO:    BCO_USD     # Brent Crude
+  NATGAS: NATGAS_USD
+  XCU:    XCU_USD     # Copper
+  WHEAT:  WHEAT_USD
+  CORN:   CORN_USD
+  SOYBN:  SOYBN_USD
+  SUGAR:  SUGAR_USD
+
+bonds:
+  USB02Y: USB02Y_USD
+  USB05Y: USB05Y_USD
+  USB10Y: USB10Y_USD
+  USB30Y: USB30Y_USD
+  DE10YB: DE10YB_EUR
+  UK10YB: UK10YB_GBP

@@ -1,0 +1,61 @@
+name: Update (daily)
+
+# Runs higher-timeframe granularities (H4, D, W) once a day.
+# Scheduled for 23:15 UTC -- after most major market closes.
+
+on:
+  schedule:
+    - cron: "15 23 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: oanda-data-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Fetch new candles
+        env:
+          OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+        run: |
+          python -m src.update \
+            --schedule daily \
+            --environment practice \
+            --summary-json run-summary.json
+
+      - name: Upload run summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-summary-${{ github.run_id }}
+          path: run-summary.json
+          if-no-files-found: ignore
+
+      - name: Commit & push data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "data: daily update $(date -u +%FT%TZ)"
+          git pull --rebase origin "$(git rev-parse --abbrev-ref HEAD)"
+          git push

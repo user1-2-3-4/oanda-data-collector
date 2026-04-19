@@ -1,0 +1,26 @@
+name: Smoke Test
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'config/**'
+      - 'src/**'
+      - 'requirements.txt'
+      - '.github/workflows/**'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run smoke test
+        env:
+          OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+        run: python -m src.smoke_test --environment practice --lookback-hours 72

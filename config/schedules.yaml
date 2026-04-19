@@ -1,0 +1,31 @@
+# Per-granularity configuration.
+#   initial_lookback_days -- how far back to go when the CSV doesn't exist yet.
+#                            After that, each run is incremental from the last
+#                            stored timestamp.
+#   update_schedule       -- hourly | daily | manual  (matched by update.py's
+#                            --schedule filter and by the GitHub Actions workflows)
+#
+# Oanda granularity codes: M1 M5 M15 M30 H1 H2 H4 D W
+
+granularities:
+  M1:
+    initial_lookback_days: 60
+    update_schedule: hourly
+  M5:
+    initial_lookback_days: 365
+    update_schedule: hourly
+  M15:
+    initial_lookback_days: 730
+    update_schedule: hourly
+  H1:
+    initial_lookback_days: 3650
+    update_schedule: hourly
+  H4:
+    initial_lookback_days: 5475
+    update_schedule: daily
+  D:
+    initial_lookback_days: 7300
+    update_schedule: daily
+  W:
+    initial_lookback_days: 7300
+    update_schedule: daily
